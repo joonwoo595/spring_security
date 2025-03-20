@@ -7,14 +7,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+
 
 import javax.servlet.http.HttpServletResponse;
-import java.security.Security;
+
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +24,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()   // CSRF 필터 끔
                 .authorizeRequests()    // URL 기반 인가 설정
-                .antMatchers("/user/**").hasRole("USER")    // USER 궝한 사용자만 접근 가능
+                .antMatchers("/user/**").hasRole("USER")    // USER 권한 사용자만 접근 가능
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/logout").authenticated()    // 인증 받은 사용자만 접근 가능
                 .antMatchers("/**").permitAll()    // 인증/인가 여부와 상관없이 접근 가능
@@ -55,7 +54,7 @@ public class SecurityConfig {
         UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("password")
-                .roles("ADMIN")
+                .roles("ADMIN","USER")
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin);
