@@ -33,16 +33,15 @@ public class SecurityConfig {
                 .antMatchers("/logout").authenticated()    // 인증 받은 사용자만 접근 가능
                 .antMatchers("/**").permitAll()    // 인증/인가 여부와 상관없이 접근 가능
                 .and()
-                .logout()   // 로그아웃 설정
+                .formLogin()
+                .and()
+                .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessHandler((req,res,auth) -> {
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 로그아웃을 위해 401 응답
-                })
+                .logoutSuccessUrl("/")// 로그아웃 설정
                 .invalidateHttpSession(true)    //세션 무효화
                 .deleteCookies("JSESSIONID")    // JSESSIONID 쿠키 삭제
-                .permitAll()
-                .and()
-                .httpBasic();   // HTTP Basic 인증 사용
+                .permitAll();
+
 
         return http.build();
     }
